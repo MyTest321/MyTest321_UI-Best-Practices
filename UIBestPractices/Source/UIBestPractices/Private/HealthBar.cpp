@@ -79,6 +79,7 @@ public:
 		HealthBar = FHealthBar();
 	}
 
+	// Ref: https://github.com/dantreble/MeshWidgetExample/tree/ab60e262110a5eeb6e480eb4953327704a759991
 	virtual int32 OnPaint(const FPaintArgs& Args, const FGeometry& AllottedGeometry, const FSlateRect& MyClippingRect, FSlateWindowElementList& OutDrawElements, int32 LayerId, const FWidgetStyle& InWidgetStyle, bool bParentEnabled) const override
 	{
 		const float Scale = AllottedGeometry.Scale;
@@ -90,14 +91,24 @@ public:
 
 			FSlateInstanceBufferData PerInstaceUpdate;
 
-			for (FHealthBarInstance Instance : HealthBar.Instances)
+			FVector2D ViewportSize = UWidgetLayoutLibrary::GetViewportSize(HealthBarWidget->GetOwningPlayer());
+			for (const FHealthBarInstance& Instance : HealthBar.Instances)
 			{
+				if (!IsValid(Instance.Owner))
+					continue;
+				
 				FVector2D Position;
 				FVector OwnerLocation = Instance.Owner->GetActorLocation() + FVector(0.f, 0.f, HealthBarWidget->VerticalHealthbarOffset);
-				UWidgetLayoutLibrary::ProjectWorldLocationToWidgetPosition(HealthBarWidget->GetOwningPlayer(), OwnerLocation, Position, false);
+				bool bProjected = UWidgetLayoutLibrary::ProjectWorldLocationToWidgetPosition(HealthBarWidget->GetOwningPlayer(), OwnerLocation, Position, false);
+				
+				if (!bProjected)
+					continue;
 
-				Instance.Position = TopLeft + Position;
+				const_cast<FHealthBarInstance&>(Instance).Position = TopLeft + Position * Scale;
 
+				if (Position.X < 0 || Position.Y < 0 || Position.X > ViewportSize.X || Position.Y > ViewportSize.Y)
+					continue;
+				
 				FSlateVectorArtInstanceData HPData;
 				HPData.SetPosition(Instance.Position + Instance.Offset * Scale);
 				HPData.SetScale(Scale);

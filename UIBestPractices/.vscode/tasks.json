@@ -1,0 +1,11 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "gen_vs2022",
+            "type": "shell",
+            "command": "echo n | ./gen_vs2022.bat",
+            "group": "build"
+        }
+    ]
+}

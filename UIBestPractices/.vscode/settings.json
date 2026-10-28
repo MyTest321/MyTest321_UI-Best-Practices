@@ -1,0 +1,30 @@
+{
+    "dotnet.defaultSolution": "disable",
+    
+    "files.exclude": {
+		".vs": true,
+        "**/_build": true,
+        "**/Binaries": true,
+        "**/Intermediate": true,
+        "**/Saved": true,
+        "**/DerivedDataCache": true,
+        "**/*.sln": true,
+        "**/*.vcxproj": true,
+        "**/*.log": true,
+
+        "**/SourceAssets": true,
+        "**/Content/Characters": true,
+        "**/Content/Collections": true,
+        "**/Content/Developers": true,
+        "**/Content/LevelPrototyping": true,
+        "**/Content/StarterContent": true,
+        "**/Content/__External**": true,
+    },
+    
+    "files.watcherExclude": {
+        "**/Binaries/**": true,
+        "**/Intermediate/**": true,
+        "**/Saved/**": true,
+        "**/DerivedDataCache/**": true,
+    }
+}
